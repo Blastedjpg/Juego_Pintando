@@ -9,9 +9,12 @@ Exercises
 5. Add width parameter.
 """
 
+
+import math
 from turtle import *
 
 from freegames import vector
+from numpy import sqrt
 
 
 def line(start, end):
@@ -27,6 +30,7 @@ def square(start, end):
     up()
     goto(start.x, start.y)
     down()
+    fillcolor(color)
     begin_fill()
 
     for count in range(4):
@@ -37,8 +41,32 @@ def square(start, end):
 
 
 def circle(start, end):
-    """Draw circle from start to end."""
-    pass  # TODO
+    """Se dibuja un ciruclo de principio a fin"""
+    up()
+
+    """El radio sera la distancia entre los dos puntos, inicio y final, se obtiene usando la siguiente formula:"""
+    radius = sqrt(round(end.x-start.x) ^ 2)+(round(end.y - start.y) ^ 2)
+
+    """Steps sera la cantidad de vultas hacia la derecha que dara Turtle para dar la ilusión de dar vuelta en circulo, deberia ser 360 pero va muy lento"""
+    steps = 20
+
+    """Extent sirve para formar la vuelta enter, debe ser 360, si es menor a 360, el circulo queda incompleto, si es mayor a 360 da un ciruclo entero y más"""
+    extent = 360
+
+    """Theta sirve para encontrar la distancia en linea recta que debe seguir Turtle antes de dar vuelta a la derecha."""
+    theta = extent/steps
+    step_size = 2*radius*math.sin(math.radians(theta/2))
+
+    goto(start.x, start.y)
+    down()
+    left(theta/2)
+    fillcolor()
+    begin_fill()
+    for i in range(1, steps):
+        left(theta)
+        forward(step_size)
+    left(theta/2)
+    end_fill()
 
 
 def rectangle(start, end):
@@ -79,6 +107,10 @@ onkey(lambda: color('white'), 'W')
 onkey(lambda: color('green'), 'G')
 onkey(lambda: color('blue'), 'B')
 onkey(lambda: color('red'), 'R')
+
+"""Se agrego el color de relleno amarillo y se selecciona con la letra mayuscula Y"""
+onkey(lambda: color('yellow'), 'Y')
+
 onkey(lambda: store('shape', line), 'l')
 onkey(lambda: store('shape', square), 's')
 onkey(lambda: store('shape', circle), 'c')
